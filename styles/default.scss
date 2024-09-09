@@ -1,0 +1,219 @@
+// Bootstrap variables
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #8f959e !default;
+$gray-600: #6a737b !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #1d2125 !default;
+$black:    #000 !default;
+
+$blue:    #0f6cbf !default;
+$indigo:  #6610f2 !default;
+$purple:  #613d7c !default;
+$pink:    #e83e8c !default;
+$red:     #ca3120 !default;
+$orange:  #f0ad4e !default;
+$yellow:  #ff7518 !default;
+$green:   #357a32 !default;
+$teal:    #20c997 !default;
+$cyan:    #008196 !default;
+
+$primary:       $blue !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $orange !default;
+$danger:        $red !default;
+$secondary:     $gray-400 !default;
+
+$info-outline:    #1f7e9a;
+$warning-outline: #a6670e;
+
+$table-accent-bg: rgba($black, .03) !default;
+
+$enable-responsive-font-sizes: true !default;
+$body-color:    $gray-900 !default;
+
+$font-size-base: 0.9375rem !default;
+$rfs-base-font-size: 0.9rem !default;
+$headings-font-weight:   700 !default;
+
+$navbar-dark-hover-color:           rgba($white, 1) !default;
+$navbar-light-color:                rgba($black, 0.6) !default;
+$navbar-light-hover-color:          rgba($black, .9) !default;
+
+$breadcrumb-padding-y:              .5rem !default;
+$breadcrumb-padding-x:              0 !default;
+$breadcrumb-item-padding:           .5rem !default;
+$breadcrumb-margin-bottom:          0 !default;
+$breadcrumb-bg:                     transparent !default;
+$breadcrumb-divider: "/" !default;
+$breadcrumb-divider-rtl: "/" !default;
+
+$alert-border-width: 0 !default;
+
+$card-group-margin: .25rem;
+
+$toast-color: $white !default;
+$toast-background-color: rgba($gray-900, .95) !default;
+$toast-header-color: $gray-100 !default;
+$toast-header-background-color: rgba($white, .1) !default;
+
+$custom-control-indicator-size: 1.25rem;
+
+$input-btn-focus-color: rgba($primary, .75) !default;
+$input-border-color: $gray-500 !default;
+
+$dropdown-link-hover-color: $white;
+$dropdown-link-hover-bg: $primary;
+
+$popover-max-width: 300px !default;
+
+$border-radius: .5rem !default;
+$border-radius-lg: .6rem !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge((
+    primary: $primary,
+    secondary: $secondary,
+    success: $success,
+    info: $info,
+    warning: $warning,
+    danger: $danger,
+), $theme-colors);
+
+$spacer: 1rem !default;
+$spacers: (
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 2),
+    6: ($spacer * 3)
+) !default;
+
+@import "fontawesome";
+@import "bootstrap";
+@import "moodle";
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
+}
+
+.userpicture {
+    border-radius: 50%;
+}
+
+.btn-outline-secondary {
+    @include button-outline-variant($gray-600);
+    border-color: $gray-600;
+}
+
+.btn-outline-info {
+    @include button-outline-variant($info-outline);
+}
+
+.btn-outline-warning {
+    @include button-outline-variant($warning-outline);
+}
+
+@include bg-variant(".bg-gray", $gray-200, true);
+
+.collab_session_icon_active {
+    content: url('http://localhost:8080/theme/boost/pix/collab_session_icon_active.png');
+    animation: none; // Eliminar cualquier animación
+}
+
+@keyframes blink-animation {
+    50% {
+        visibility: hidden;
+    }
+}
+  
+/* Estilos para el modal */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 100; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; 
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+    .modal-content {
+        width: 80%; /* Ajustar el ancho del modal para pantallas pequeñas */
+    }
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+input[type="text"], input[type="datetime-local"] {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button[type="submit"] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Estilos para el ícono colaborativo */
+.collab_session_icon_active {
+    content: url('http://localhost:8080/mod/collabsession/pix/collab_session_icon_active.png');
+    animation: none; // Eliminar cualquier animación
+}
+
+@keyframes blink-animation {
+    50% {
+        visibility: hidden;
+    }
+}

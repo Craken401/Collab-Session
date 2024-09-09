@@ -22,8 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // Course module ID
 
@@ -32,29 +32,27 @@ if (!$id) {
 }
 
 $cm = get_coursemodule_from_id('collabsession', $id, 0, false, MUST_EXIST);
-$course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-$moduleinstance = $DB->get_record('collabsession', array('id' => $cm->instance), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+$moduleinstance = $DB->get_record('collabsession', ['id' => $cm->instance], '*', MUST_EXIST);
 
 require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 
-$PAGE->set_url('/mod/collabsession/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/collabsession/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
-$event = \mod_collabsession\event\course_module_viewed::create(array(
-    'objectid' => $moduleinstance->id,
-    'context' => $context
-));
-$event->add_record_snapshot('course', $course);
-$event->add_record_snapshot('collabsession', $moduleinstance);
-$event->trigger();
+// Renderizar el template del navbar utilizando render_from_template.
+$templatecontext = [
+    'config' => $CFG, // Añadir variables necesarias para el template
+    'sitename' => format_string($SITE->fullname),
+];
 
 echo $OUTPUT->header();
-$url = new moodle_url('/mod/collabsession/collaborate.php', ['id' => $cm->id]); // Asegúrate de que la URL es correcta según tu estructura de archivos
+echo $OUTPUT->render_from_template('mod_collabsession/navbar', $templatecontext); // Aquí renderizamos el navbar
+$url = new moodle_url('/mod/collabsession/collaborate.php', ['id' => $cm->id]); // Asegúrate de que la URL es correcta
 $buttonlabel = get_string('startcollab', 'mod_collabsession'); // Asegúrate de haber definido esta cadena en tu archivo de idioma
 echo $OUTPUT->single_button($url, $buttonlabel, 'get');
 echo $OUTPUT->footer();
-

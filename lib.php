@@ -22,12 +22,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * Return if the plugin supports $feature.
- *
- * @param string $feature Constant representing the feature.
- * @return true | null True if the feature is supported, null otherwise.
- */
 function collabsession_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_INTRO:
@@ -37,17 +31,6 @@ function collabsession_supports($feature) {
     }
 }
 
-/**
- * Saves a new instance of the mod_collabsession into the database.
- *
- * Given an object containing all the necessary data, (defined by the form
- * in mod_form.php) this function will create a new instance and return the id
- * number of the instance.
- *
- * @param object $moduleinstance An object from the form.
- * @param mod_collabsession_mod_form $mform The form.
- * @return int The id of the newly inserted record.
- */
 function collabsession_add_instance($moduleinstance, $mform = null) {
     global $DB;
     $moduleinstance->timecreated = time();
@@ -83,12 +66,6 @@ function collabsession_delete_instance($id) {
     }
 }
 
-/**
- * Create or update a session.
- *
- * @param stdClass $data Data from the form.
- * @return int The ID of the session created or updated.
- */
 function create_or_update_session($data) {
     global $DB;
 
@@ -108,7 +85,3 @@ function create_or_update_session($data) {
 
     return $session->id;
 }
-
-
-
-
