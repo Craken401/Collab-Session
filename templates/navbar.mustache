@@ -1,22 +1,4 @@
-{{!
-    This file is part of Moodle - http://moodle.org/
-
-    Moodle is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Moodle is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-}}
-
 <nav class="navbar fixed-top navbar-light bg-white navbar-expand" aria-label="{{#str}}sitemenubar, admin{{/str}}">
-
     <button class="navbar-toggler aabtn d-block d-md-none px-1 my-1 border-0" data-toggler="drawers" data-action="toggle" data-target="theme_boost-drawers-primary">
         <span class="navbar-toggler-icon"></span>
         <span class="sr-only">{{#str}}sidepanel, core{{/str}}</span>
@@ -67,27 +49,97 @@
 </nav>
 
 <!-- Modal para la sesión colaborativa -->
-<div id="collab-session-modal" class="modal">
+<div id="collab-session-modal" class="modal collab-session-modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h2>Iniciar Sesión Colaborativa</h2>
-        <form id="collab-session-form">
-            <label for="title">Título de la reunión:</label>
-            <input type="text" id="title" name="title" required>
 
-            <label for="datetime">Fecha y Hora:</label>
-            <input type="datetime-local" id="datetime" name="datetime" required>
+        <!-- Navegación por pestañas -->
+        <ul class="nav nav-tabs" id="collabTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="session-tab" data-toggle="tab" href="#session" role="tab" aria-controls="session" aria-selected="true">Sesión</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="invitations-tab" data-toggle="tab" href="#invitations" role="tab" aria-controls="invitations" aria-selected="false">Invitar</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="recent-invitations-tab" data-toggle="tab" href="#recent-invitations" role="tab" aria-controls="recent-invitations" aria-selected="false">Invitaciones Recientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="exercises-tab" data-toggle="tab" href="#exercises" role="tab" aria-controls="exercises" aria-selected="false">Ejercicios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="close-tab" data-toggle="tab" href="#close" role="tab" aria-controls="close" aria-selected="false">Cerrar Sesión</a>
+            </li>
+        </ul>
 
-            <label for="invitees">Invitados (separar por comas):</label>
-            <input type="text" id="invitees" name="invitees" placeholder="email1@example.com, email2@example.com">
+        <!-- Contenido de las pestañas -->
+        <div class="tab-content" id="collabTabContent">
+            <!-- Contenido de la pestaña Sesión -->
+            <div class="tab-pane fade show active" id="session" role="tabpanel" aria-labelledby="session-tab">
+                <form id="collab-session-form">
+                    <label for="title">Título de la reunión:</label>
+                    <input type="text" id="title" name="title" required>
 
-            <button type="submit">Crear Sesión</button>
-        </form>
+                    <label for="datetime">Fecha y Hora:</label>
+                    <input type="datetime-local" id="datetime" name="datetime" required>
+
+                    <div class="session-buttons">
+                        <button type="submit" class="btn btn-success">Crear Sesión</button>
+                        <button type="button" class="btn btn-primary">Guardar Configuración Actual</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Pestaña Invitar -->
+            <div class="tab-pane fade" id="invitations" role="tabpanel" aria-labelledby="invitations-tab">
+                <h3>Invitados</h3>
+                <label for="invitees">Invitados (separar por comas):</label>
+                <input type="text" id="invitees" name="invitees" placeholder="email1@example.com, email2@example.com">
+
+                <h3>Seleccionar Roles</h3>
+                <select id="roles" name="roles">
+                    <option value="participant">Participante</option>
+                    <option value="observer">Observador</option>
+                    <option value="moderator">Moderador</option>
+                </select>
+            </div>
+
+            <!-- Pestaña Invitaciones Recientes -->
+            <div class="tab-pane fade" id="recent-invitations" role="tabpanel" aria-labelledby="recent-invitations-tab">
+                <h3>Sesiones próximas</h3>
+                <ul>
+                    <li>Invitación 1</li>
+                    <li>Invitación 2</li>
+                    <li>Invitación 3</li>
+                </ul>
+            </div>
+
+            <!-- Pestaña Ejercicios -->
+            <div class="tab-pane fade" id="exercises" role="tabpanel" aria-labelledby="exercises-tab">
+                <h3>Seleccionar Ejercicios</h3>
+                <select id="exercises" name="exercises" multiple>
+                    <option value="exercise1">Ejercicio 1</option>
+                    <option value="exercise2">Ejercicio 2</option>
+                    <option value="exercise3">Ejercicio 3</option>
+                </select>
+            </div>
+
+            <!-- Pestaña Cerrar Sesión -->
+            <div class="tab-pane fade" id="close" role="tabpanel" aria-labelledby="close-tab">
+                <h3>Cerrar Sesión Colaborativa</h3>
+                <p>Haz clic en el botón para cerrar la sesión colaborativa actual.</p>
+                <button type="button" class="btn btn-danger">Cerrar Sesión</button>
+
+                <hr> <!-- Línea separadora -->
+
+                <h3>Abandonar Sesión Colaborativa</h3>
+                <p>Los participantes pueden abandonar la sesión colaborativa actual.</p>
+                <button type="button" class="btn btn-danger">Abandonar Sesión</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Referencia a JavaScript -->
 <script src="{{config.wwwroot}}/mod/collabsession/js/collab_session.js"></script>
-
-<!-- Referencia a CSS -->
 <link rel="stylesheet" href="{{config.wwwroot}}/mod/collabsession/styles/collab_session.css">
