@@ -63,7 +63,7 @@
                 <a class="nav-link" id="invitations-tab" data-toggle="tab" href="#invitations" role="tab" aria-controls="invitations" aria-selected="false">Invitar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="recent-invitations-tab" data-toggle="tab" href="#recent-invitations" role="tab" aria-controls="recent-invitations" aria-selected="false">Invitaciones Recientes</a>
+                <a class="nav-link" id="recent-invitations-tab" data-toggle="tab" href="#recent-invitations" role="tab" aria-controls="recent-invitations" aria-selected="false">Sesiones Próximas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="exercises-tab" data-toggle="tab" href="#exercises" role="tab" aria-controls="exercises" aria-selected="false">Ejercicios</a>
@@ -78,15 +78,16 @@
             <!-- Contenido de la pestaña Sesión -->
             <div class="tab-pane fade show active" id="session" role="tabpanel" aria-labelledby="session-tab">
                 <form id="collab-session-form">
-                    <label for="title">Título de la reunión:</label>
-                    <input type="text" id="title" name="title" required>
+                    <label for="tituloReunion">Título de la reunión:</label>
+                    <input type="text" id="tituloReunion" name="tituloReunion" required>
 
-                    <label for="datetime">Fecha y Hora:</label>
-                    <input type="datetime-local" id="datetime" name="datetime" required>
+                    <label for="fechaSesion">Fecha y Hora:</label>
+                    <input type="datetime-local" id="fechaSesion" name="fechaSesion" required>
 
                     <div class="session-buttons">
-                        <button type="submit" class="btn btn-success">Crear Sesión</button>
-                        <button type="button" class="btn btn-primary">Guardar Configuración Actual</button>
+                        <button type="button" id="crearSesion" class="btn btn-success">Crear Sesión</button>
+                        <button type="button" id="guardarConfiguracion" class="btn btn-primary">Guardar Configuración Actual</button>
+                        <button type="button" class="btn btn-warning" id="cargarConfiguracion">Cargar Configuración</button>
                     </div>
                 </form>
             </div>
@@ -134,7 +135,7 @@
                 <hr> <!-- Línea separadora -->
 
                 <h3>Abandonar Sesión Colaborativa</h3>
-                <p>Los participantes pueden abandonar la sesión colaborativa actual.</p>
+                <p>Presiona el botón para abandonar la sesión.</p>
                 <button type="button" class="btn btn-danger">Abandonar Sesión</button>
             </div>
         </div>

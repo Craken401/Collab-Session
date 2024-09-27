@@ -66,22 +66,3 @@ function collabsession_delete_instance($id) {
     }
 }
 
-function create_or_update_session($data) {
-    global $DB;
-
-    $session = new stdClass();
-    $session->name = $data->sessionname;
-    $session->description = $data->sessiondescription;
-    $session->participants = $data->participants;
-    if (isset($data->id) && !empty($data->id)) {
-        $session->id = $data->id;
-        $session->timemodified = time();
-        $DB->update_record('collabsession', $session);
-    } else {
-        $session->timecreated = time();
-        $session->timemodified = $session->timecreated;
-        $session->id = $DB->insert_record('collabsession', $session, true);
-    }
-
-    return $session->id;
-}

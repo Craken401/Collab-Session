@@ -22,37 +22,42 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__ . '/../../config.php');
-require_once(__DIR__ . '/lib.php');
+ require(__DIR__ . '/../../config.php');
+ require_once(__DIR__ . '/lib.php');
+ 
+ $id = optional_param('id', 0, PARAM_INT); // ID del módulo del curso
+ 
+ // Validar si existe el parámetro 'id'
+ if (!$id) {
+     print_error('missingparam', 'error', '', 'id');
+ }
+ 
+ // Obtener el curso y la instancia del módulo
+ $cm = get_coursemodule_from_id('collabsession', $id, 0, false, MUST_EXIST);
+ $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+ $moduleinstance = $DB->get_record('collabsession', ['id' => $cm->instance], '*', MUST_EXIST);
+ 
+ // Requerir autenticación para acceder a la sesión colaborativa
+ require_login($course, true, $cm);
+ 
+ $context = context_module::instance($cm->id);
+ 
+ $PAGE->set_url('/mod/collabsession/view.php', ['id' => $cm->id]);
+ $PAGE->set_title(format_string($moduleinstance->name));
+ $PAGE->set_heading(format_string($course->fullname));
+ $PAGE->set_context($context);
+ 
+ // Renderizar la página
+ echo $OUTPUT->header();
 
-$id = optional_param('id', 0, PARAM_INT); // Course module ID
+ // Contexto para renderizar el template del navbar.
+ $templatecontext = [
+     'config' => $CFG, // Añade variables necesarias para el template
+     'sitename' => format_string($SITE->fullname),
+ ];
 
-if (!$id) {
-    print_error('missingparam', 'error', '', 'id');
-}
+ // Renderizar el template del navbar.
+ echo $OUTPUT->render_from_template('mod_collabsession/navbar', $templatecontext);
 
-$cm = get_coursemodule_from_id('collabsession', $id, 0, false, MUST_EXIST);
-$course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
-$moduleinstance = $DB->get_record('collabsession', ['id' => $cm->instance], '*', MUST_EXIST);
-
-require_login($course, true, $cm);
-
-$context = context_module::instance($cm->id);
-
-$PAGE->set_url('/mod/collabsession/view.php', ['id' => $cm->id]);
-$PAGE->set_title(format_string($moduleinstance->name));
-$PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_context($context);
-
-// Renderizar el template del navbar utilizando render_from_template.
-$templatecontext = [
-    'config' => $CFG, // Añadir variables necesarias para el template
-    'sitename' => format_string($SITE->fullname),
-];
-
-echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('mod_collabsession/navbar', $templatecontext); // Aquí renderizamos el navbar
-$url = new moodle_url('/mod/collabsession/collaborate.php', ['id' => $cm->id]); // Asegúrate de que la URL es correcta
-$buttonlabel = get_string('startcollab', 'mod_collabsession'); // Asegúrate de haber definido esta cadena en tu archivo de idioma
-echo $OUTPUT->single_button($url, $buttonlabel, 'get');
-echo $OUTPUT->footer();
+ // Pie de página
+ echo $OUTPUT->footer();
