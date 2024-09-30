@@ -1,27 +1,16 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// Este archivo forma parte de Moodle
 //
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// Moodle es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
+// GNU General Public License tal como lo publica la Free Software Foundation,
+// ya sea la versión 3 de la Licencia, o cualquier versión posterior.
 //
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// Moodle se distribuye con la esperanza de que sea útil, pero sin ninguna garantía;
+// incluso sin la garantía implícita de COMERCIABILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR.
+// Mira la GNU General Public License para más detalles.
 //
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
-
-/**
- * Display information about all the mod_collabsession modules in the requested course.
- *
- * @package     mod_collabsession
- * @copyright   2024 Victor <victornolsa@outlook.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
+// Deberías haber recibido una copia de la GNU General Public License junto con Moodle.
+// Si no, mira <http://www.gnu.org/licenses/>.
 
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->dirroot . '/mod/collabsession/classes/Session.php');
@@ -29,16 +18,22 @@ require_login();
 
 global $DB;
 
-// Obtener los últimos datos guardados
-$lastsession = $DB->get_record_sql('SELECT * FROM {sesiones_colaborativas} ORDER BY id_sesion DESC LIMIT 1');
-
-// Devolver respuesta en formato JSON
-if ($lastsession) {
-    echo json_encode([
-        'success' => true,
-        'tituloReunion' => $lastsession->nombre_sesion,
-        'fechaSesion' => $lastsession->fecha_inicio
-    ]);
-} else {
-    echo json_encode(['success' => false, 'message' => 'No se encontró configuración guardada']);
+try {
+    // Obtener los últimos datos guardados.
+    $lastsession = $DB->get_record_sql('SELECT * FROM {sesiones_colaborativas} ORDER BY id_sesion DESC LIMIT 1');
+    
+    if ($lastsession) {
+        // Devolver respuesta en formato JSON con los datos.
+        echo json_encode([
+            'success' => true,
+            'tituloReunion' => $lastsession->nombre_sesion,
+            'fechaSesion' => $lastsession->fecha_inicio,
+        ]);
+    } else {
+        // Caso donde no se encuentra ninguna sesión en la base de datos.
+        echo json_encode(['success' => false, 'message' => 'No se encontró configuración guardada.']);
+    }
+} catch (dml_exception $e) {
+    // Capturar cualquier excepción de base de datos y devolver error en formato JSON.
+    echo json_encode(['success' => false, 'message' => 'Error en la consulta a la base de datos: ' . $e->getMessage()]);
 }

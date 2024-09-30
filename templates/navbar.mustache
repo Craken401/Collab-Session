@@ -77,19 +77,22 @@
         <div class="tab-content" id="collabTabContent">
             <!-- Contenido de la pestaña Sesión -->
             <div class="tab-pane fade show active" id="session" role="tabpanel" aria-labelledby="session-tab">
-                <form id="collab-session-form">
-                    <label for="tituloReunion">Título de la reunión:</label>
-                    <input type="text" id="tituloReunion" name="tituloReunion" required>
+            <form action="/mod/collabsession/guardar_configuracion.php" method="POST">
+                 <label for="tituloReunion">Título de la reunión:</label>
+                <input type="text" id="tituloReunion" name="nombre_sesion" required>
 
-                    <label for="fechaSesion">Fecha y Hora:</label>
-                    <input type="datetime-local" id="fechaSesion" name="fechaSesion" required>
+                <label for="fechaSesion">Fecha y Hora:</label>
+                <input type="datetime-local" id="fechaSesion" name="fecha_inicio" required>
 
-                    <div class="session-buttons">
-                        <button type="button" id="crearSesion" class="btn btn-success">Crear Sesión</button>
-                        <button type="button" id="guardarConfiguracion" class="btn btn-primary">Guardar Configuración Actual</button>
-                        <button type="button" class="btn btn-warning" id="cargarConfiguracion">Cargar Configuración</button>
-                    </div>
-                </form>
+                <input type="hidden" name="estado_sesion" value="activa">
+
+            <div class="session-buttons">
+                <button type="submit" class="btn btn-success">Crear Sesión</button>
+                <button type="submit" class="btn btn-primary" formaction="/mod/collabsession/guardar_configuracion.php">Guardar Configuración Actual</button>
+                <button type="submit" class="btn btn-warning" formaction="/mod/collabsession/cargar_configuracion.php">Cargar Configuración</button>
+            </div>
+
+        </form>
             </div>
 
             <!-- Pestaña Invitar -->

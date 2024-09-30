@@ -15,38 +15,72 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Display information about all the mod_collabsession modules in the requested course.
+ * Class Session
+ *
+ * This class handles the CRUD operations for collaborative sessions.
  *
  * @package     mod_collabsession
  * @copyright   2024 Victor <victornolsa@outlook.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- class Session {
+require_once(__DIR__ . '/../../config.php');
+require_login();
+
+class Session {
+
+    // Crear nueva sesión
     public static function create($data) {
         global $DB;
         $session = new stdClass();
-        $session->name = $data->sessionname;
-        $session->description = $data->sessiondescription;
-        $session->participants = $data->participants;
-        $session->timecreated = time();
-        $session->timemodified = $session->timecreated;
-        return $DB->insert_record('collabsession', $session, true);
+        $session->nombre_sesion = $data->nombre_sesion;
+        $session->estado_sesion = $data->estado_sesion;  // Se puede establecer como 'activa' por defecto
+        $session->fecha_inicio = $data->fecha_inicio;
+        $session->fecha_fin = isset($data->fecha_fin) ? $data->fecha_fin : null; // Puede ser nulo
+
+        try {
+            return $DB->insert_record('sesiones_colaborativas', $session, true);
+        } catch (dml_exception $e) {
+            throw new moodle_exception('inserterror', 'mod_collabsession', '', null, $e->getMessage());
+        }
     }
 
+    // Actualizar sesión
     public static function update($data) {
         global $DB;
         $session = new stdClass();
-        $session->id = $data->id;
-        $session->name = $data->sessionname;
-        $session->description = $data->sessiondescription;
-        $session->participants = $data->participants;
-        $session->timemodified = time();
-        return $DB->update_record('collabsession', $session);
+        $session->id_sesion = $data->id_sesion;
+        $session->nombre_sesion = $data->nombre_sesion;
+        $session->estado_sesion = $data->estado_sesion;
+        $session->fecha_inicio = $data->fecha_inicio;
+        $session->fecha_fin = isset($data->fecha_fin) ? $data->fecha_fin : null;
+
+        try {
+            return $DB->update_record('sesiones_colaborativas', $session);
+        } catch (dml_exception $e) {
+            throw new moodle_exception('updateerror', 'mod_collabsession', '', null, $e->getMessage());
+        }
     }
 
+    // Eliminar sesión
     public static function delete($id) {
         global $DB;
-        return $DB->delete_records('collabsession', ['id' => $id]);
+        try {
+            return $DB->delete_records('sesiones_colaborativas', ['id_sesion' => $id]);
+        } catch (dml_exception $e) {
+            throw new moodle_exception('deleteerror', 'mod_collabsession', '', null, $e->getMessage());
+        }
+    }
+
+    // Leer una sesión
+    public static function read($id) {
+        global $DB;
+        return $DB->get_record('sesiones_colaborativas', ['id_sesion' => $id], '*', MUST_EXIST);
+    }
+
+    // Leer todas las sesiones
+    public static function read_all() {
+        global $DB;
+        return $DB->get_records('sesiones_colaborativas');
     }
 }

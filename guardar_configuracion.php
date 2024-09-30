@@ -14,36 +14,43 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-/**
- * Display information about all the mod_collabsession modules in the requested course.
- *
- * @package     mod_collabsession
- * @copyright   2024 Victor <victornolsa@outlook.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+require_once('../../config.php');
+require_once('Session.php');
 
- require_once(__DIR__ . '/../../config.php');
- require_once($CFG->dirroot . '/mod/collabsession/lib.php');
- require_once($CFG->dirroot . '/mod/collabsession/classes/Session.php');
+require_login();
 
- require_login();
- 
- $titulo = required_param('tituloReunion', PARAM_TEXT);
- $fecha = required_param('fechaSesion', PARAM_TEXT);
- 
- $sessiondata = new stdClass();
- $sessiondata->sessionname = $titulo;
- $sessiondata->sessiondescription = '';  // Añade descripción si tienes
- $sessiondata->participants = '';  // Añade participantes si tienes
- 
- $sessionid = Session::create($sessiondata);
- 
- if ($sessionid) {
-     echo json_encode(['success' => true]);
- } else {
-     echo json_encode(['success' => false, 'message' => 'Error al guardar la configuración']);
- }
- 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recoger los datos del formulario
+    $nombre_sesion = required_param('nombre_sesion', PARAM_TEXT);
+    $fecha_inicio = required_param('fecha_inicio', PARAM_TEXT);
+
+    // Convertir la fecha al formato adecuado (de 'd/m/Y H:i' a 'Y-m-d H:i:s')
+    $fecha_inicio_formateada = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $fecha_inicio)));
+
+    // Si el campo 'estado_sesion' no está en el formulario, asignar un valor por defecto
+    $estado_sesion = 'activa';
+
+    // Preparar el objeto para la sesión
+    $sessiondata = new stdClass();
+    $sessiondata->nombre_sesion = $nombre_sesion;
+    $sessiondata->fecha_inicio = $fecha_inicio_formateada;
+    $sessiondata->estado_sesion = $estado_sesion;
+
+    // Intentar crear la sesión
+    try {
+        $sessionid = Session::create($sessiondata);
+        if ($sessionid && $DB->record_exists('sesiones_colaborativas', array('id_sesion' => $sessionid))) {
+            redirect(new moodle_url('/mod/collabsession/view.php', ['id' => $sessionid]), 'Sesión creada correctamente');
+        } else {
+            echo 'Error al crear o encontrar la sesión';
+        }
+    } catch (dml_exception $e) {
+        // Capturar el error de base de datos y mostrarlo
+        echo 'Error al insertar la sesión: ' . $e->getMessage();
+    }
+} else {
+    echo 'Método no permitido';
+}
 
 
 
